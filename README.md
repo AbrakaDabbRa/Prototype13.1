@@ -1,53 +1,48 @@
-# 🎮 Gameify
-
-A web-based game tracking app with a **Node.js backend** — zero npm dependencies required.
+# 🎮 Gameify v2 — With Accounts
 
 ## Features
-- **Full CRUD**: Add, view, edit, and delete games
-- **Star ratings** (1–5)
-- **Notes** per game
-- **Filter** by status (Backlog / Playing / Completed)
-- **Search** by title or platform
-- **Persistent storage** via `games.json` on the server
-- **Live stats** (total, playing, backlog, done)
+- Register / Login with username & password
+- Google Sign-In (optional)
+- Each user has their own private game library
+- Full CRUD: add, edit, delete games
+- Star ratings, notes, status tracking
+- Zero npm dependencies
 
-## Quick Start
+## Run Locally
 
 ```bash
 node server.js
+# Open http://localhost:3000
 ```
 
-Then open **http://localhost:3000** in your browser.
+## Deploy to Render
 
-> Requires **Node.js v14.17+** (for `crypto.randomUUID`). No `npm install` needed.
+1. Push this folder to GitHub
+2. Go to render.com → New Web Service
+3. Connect your repo
+4. Set:
+   - **Build Command:** (leave blank)
+   - **Start Command:** `node server.js`
+5. Add these Environment Variables on Render:
+   - `JWT_SECRET` → any long random string (e.g. `mygameifysecret123`)
+   - `BASE_URL` → your Render URL (e.g. `https://gameify.onrender.com`)
 
-## API Endpoints
+## Enable Google Sign-In (optional)
 
-| Method | URL               | Description        |
-|--------|-------------------|--------------------|
-| GET    | /api/games        | List all games     |
-| POST   | /api/games        | Create a game      |
-| PUT    | /api/games/:id    | Update a game      |
-| DELETE | /api/games/:id    | Delete a game      |
+1. Go to console.cloud.google.com
+2. Create a project → Enable Google+ API
+3. OAuth Credentials → Create OAuth 2.0 Client ID
+4. Add authorized redirect URI: `https://your-app.onrender.com/auth/google/callback`
+5. Add to Render environment variables:
+   - `GOOGLE_CLIENT_ID` → your client ID
+   - `GOOGLE_CLIENT_SECRET` → your client secret
 
-### Game Object
-```json
-{
-  "id":       "uuid-string",
-  "title":    "Elden Ring",
-  "platform": "PC",
-  "status":   "Playing",
-  "rating":   5,
-  "notes":    "Incredible game.",
-  "addedAt":  "2026-04-22T00:00:00.000Z"
-}
-```
+## Environment Variables
 
-## Project Structure
-```
-gameify/
-├── server.js     ← Node.js backend + frontend HTML (single file)
-├── games.json    ← Created automatically on first run
-├── package.json
-└── README.md
-```
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `JWT_SECRET` | Yes (in prod) | Secret key for signing tokens |
+| `BASE_URL` | Yes (in prod) | Your full app URL |
+| `GOOGLE_CLIENT_ID` | No | For Google sign-in |
+| `GOOGLE_CLIENT_SECRET` | No | For Google sign-in |
+| `PORT` | No | Defaults to 3000 |
